@@ -1,0 +1,5 @@
+{
+    "compilerOptions": {"baseUrl": "./src"},
+    "extends": "./node_modules/@chriscarrillo/ts/config/base.json"
+  }
+  
