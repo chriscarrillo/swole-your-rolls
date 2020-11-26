@@ -1,0 +1,32 @@
+@import 'theme/app.scss';
+
+:export {
+    colors: {
+        primary: $primary;
+        secondary: $secondary;
+    }
+
+    spacer0: map-get($spacers, 0);
+    spacer1: map-get($spacers, 1);
+    spacer2: map-get($spacers, 2);
+    spacer3: map-get($spacers, 3);
+    spacer4: map-get($spacers, 4);
+    spacer5: map-get($spacers, 5);
+    spacer6: map-get($spacers, 6);
+    spacer7: map-get($spacers, 7);
+
+    breakpoints: {
+        min: {
+          sm: map-get($grid-breakpoints, sm);
+          md: map-get($grid-breakpoints, md);
+          lg: map-get($grid-breakpoints, lg);
+          xl: map-get($grid-breakpoints, xl);
+        }
+        max: {
+          xs: map-get($grid-breakpoints, sm) - 1;
+          sm: map-get($grid-breakpoints, md) - 1;
+          md: map-get($grid-breakpoints, lg) - 1;
+          lg: map-get($grid-breakpoints, xl) - 1;
+        }
+      }
+}

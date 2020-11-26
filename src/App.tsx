@@ -1,13 +1,17 @@
 import React from 'react'
 import {Button} from 'react-bootstrap'
-
-import 'theme/app.scss'
+import {ThemeProvider} from 'styled-components'
+import {theme} from 'theme'
 
 /**
  * Base App.
  * @return Render App
  */
-const App = () => <Button variant="primary">Swole Your Rolls</Button>
+const App = () => (
+  <ThemeProvider theme={theme}>
+    <Button variant="primary">Swole Your Rolls</Button>
+  </ThemeProvider>
+)
 
 /**
  * App.
