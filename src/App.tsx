@@ -1,10 +1,13 @@
 import React from 'react'
+import {Button} from 'react-bootstrap'
+
+import 'theme/app.scss'
 
 /**
  * Base App.
  * @return Render App
  */
-const App = () => <>Swole Your Rolls</>
+const App = () => <Button variant="primary">Swole Your Rolls</Button>
 
 /**
  * App.
