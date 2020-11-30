@@ -3,6 +3,7 @@
     "source.fixAll": true
   },
   "editor.rulers": [100],
+  "files.eol": "\n",
   "telemetry.enableCrashReporter": false,
   "telemetry.enableTelemetry": false,
   "todo-tree.excludeGlobs": ["**/node_modules/**"],

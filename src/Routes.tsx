@@ -1,19 +1,19 @@
-import firebase from 'firebase/app'
+import {AuthContext} from 'auth/context'
 import {HomePage} from 'pages/Home'
 import {LoginPage} from 'pages/Login'
-import React from 'react'
+import React, {useContext} from 'react'
 import {Redirect, Route, Switch} from 'react-router-dom'
-
-interface Props {
-  user: firebase.User | undefined
-}
 
 /**
  * Defines the routes accessible by authentication.
- * @param props Props for the Routes
  * @return Routes
  */
-export const Routes: React.FC<Props> = (props: Props) => {
+export const Routes: React.FC = () => {
+  /**
+   * Contexts.
+   */
+  const {isLoggedIn} = useContext(AuthContext)
+
   const loggedInRoutes = () => (
     <Switch>
       <Route exact component={HomePage} path="/home" />
@@ -27,5 +27,5 @@ export const Routes: React.FC<Props> = (props: Props) => {
     </Switch>
   )
 
-  return props.user ? loggedInRoutes() : loggedOutRoutes()
+  return isLoggedIn ? loggedInRoutes() : loggedOutRoutes()
 }

@@ -1,6 +1,7 @@
-import React, {useCallback} from 'react'
+import {AuthContext} from 'auth/context'
+
+import React, {useContext} from 'react'
 import {Button} from 'react-bootstrap'
-import firebase from 'services/firebase'
 
 /**
  * Home page.
@@ -8,11 +9,9 @@ import firebase from 'services/firebase'
  */
 export const HomePage = () => {
   /**
-   * Callbacks.
+   * Contexts.
    */
-  const logout = useCallback(async () => {
-    await firebase.auth().signOut()
-  }, [])
+  const {logout} = useContext(AuthContext)
 
   return (
     <>

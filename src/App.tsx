@@ -1,10 +1,10 @@
 import {Routes} from 'Routes'
 
+import {AuthProvider} from 'auth/context/provider'
 import React from 'react'
-import {useAuthState} from 'react-firebase-hooks/auth'
+import {Container} from 'react-bootstrap'
 import {BrowserRouter} from 'react-router-dom'
 
-import firebase from 'services/firebase'
 import {ThemeProvider} from 'styled-components'
 import {theme} from 'theme'
 
@@ -12,16 +12,17 @@ import {theme} from 'theme'
  * Base App.
  * @return Render App
  */
-const App = () => {
-  const [user] = useAuthState(firebase.auth())
-  return (
+const App = () => (
+  <AuthProvider>
     <BrowserRouter>
       <ThemeProvider theme={theme}>
-        <Routes user={user} />
+        <Container fluid>
+          <Routes />
+        </Container>
       </ThemeProvider>
     </BrowserRouter>
-  )
-}
+  </AuthProvider>
+)
 
 /**
  * App.

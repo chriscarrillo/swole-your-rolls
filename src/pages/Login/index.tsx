@@ -1,6 +1,7 @@
-import React, {useCallback} from 'react'
+import {AuthContext} from 'auth/context'
+
+import React, {useContext} from 'react'
 import {Button} from 'react-bootstrap'
-import firebase from 'services/firebase'
 
 /**
  * Login page.
@@ -8,16 +9,14 @@ import firebase from 'services/firebase'
  */
 export const LoginPage = () => {
   /**
-   * Callbacks.
+   * Contexts.
    */
-  const login = useCallback(async () => {
-    await firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider())
-  }, [])
+  const {login} = useContext(AuthContext)
 
   return (
     <>
       <h1>Login</h1>
-      <Button onClick={login}>Login with Google</Button>
+      <Button onClick={login}>Login</Button>
     </>
   )
 }
