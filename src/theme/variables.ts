@@ -5,8 +5,21 @@ import SCSS from 'theme/variables.module.scss'
  * Colors.
  */
 export const colors = {
-  primary: SCSS.colorsPrimary,
-  secondary: SCSS.colorsSecondary,
+  danger: SCSS.danger,
+  dark: SCSS.dark,
+  light: SCSS.light,
+  primary: SCSS.primary,
+  secondary: SCSS.secondary,
+  success: SCSS.success,
+}
+
+/**
+ * Fonts.
+ */
+export const fonts = {
+  base: SCSS.fontNormal,
+  bold: SCSS.fontBold,
+  semiBold: SCSS.fontSemiBold,
 }
 
 /** Spacers. */

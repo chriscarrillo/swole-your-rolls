@@ -1,2 +1,28 @@
 @import 'variables';
 @import '~bootstrap/scss/bootstrap';
+
+$font-family-base: 'Montserrat Regular', sans-serif;
+$font-family-bold: 'Montserrat Bold', sans-serif;
+$font-family-semi: 'Montserrat SemiBold', sans-serif;
+
+@font-face {
+  font-family: 'Montserrat Regular';
+  src: url('./../assets/fonts/Montserrat-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Montserrat Bold';
+  src: url('./../assets/fonts/Montserrat-Bold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Montserrat SemiBold';
+  src: url('./../assets/fonts/Montserrat-SemiBold.ttf') format('truetype');
+}
+
+html,
+body,
+#root {
+  font-family: $font-family-base !important;
+  height: 100%;
+}

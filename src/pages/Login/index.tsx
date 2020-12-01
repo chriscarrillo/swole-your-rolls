@@ -1,12 +1,16 @@
 import {AuthContext} from 'auth/context'
-
 import {Form, Formik, FormikProps} from 'formik'
 import {LoginFormValues} from 'models/FormValues'
 import React, {useCallback, useContext} from 'react'
-import {Form as BootstrapForm, Button, Col, Container, Row} from 'react-bootstrap'
-import {useHistory} from 'react-router'
+import {Form as BootstrapForm, Button, Card} from 'react-bootstrap'
+import {Link} from 'react-router-dom'
 import styled from 'styled-components'
 import * as Yup from 'yup'
+
+const LoginCard = styled(Card)`
+  margin: 0 auto;
+  max-width: 500px;
+`
 
 const LoginButton = styled(Button)`
   margin-right: ${({theme}) => theme.spacers[2]};
@@ -28,11 +32,6 @@ const LoginFormSchema = Yup.object().shape({
  */
 export const LoginPage = () => {
   /**
-   * Special hooks.
-   */
-  const history = useHistory()
-
-  /**
    * Contexts.
    */
   const {login} = useContext(AuthContext)
@@ -47,66 +46,57 @@ export const LoginPage = () => {
     [login],
   )
 
-  const handleRegisterClick = useCallback(() => {
-    history.push('/register')
-  }, [history])
-
   return (
-    <Formik
-      validateOnBlur
-      initialValues={initialFormValues}
-      validationSchema={LoginFormSchema}
-      onSubmit={handleLogin}
-    >
-      {(props: FormikProps<LoginFormValues>) => (
-        <Form>
-          <Container>
-            <Row>
-              <Col>
-                <BootstrapForm.Group controlId="email">
-                  <BootstrapForm.Label>Email</BootstrapForm.Label>
-                  <BootstrapForm.Control
-                    placeholder="Enter email"
-                    type="email"
-                    value={props.values.email}
-                    onBlur={props.handleBlur}
-                    onChange={props.handleChange}
-                  />
-                  {props.touched.email !== undefined && props.errors.email && (
-                    <BootstrapForm.Text className="text-danger">
-                      {props.errors.email}
-                    </BootstrapForm.Text>
-                  )}
-                </BootstrapForm.Group>
+    <LoginCard>
+      <LoginCard.Header as="h3">Login</LoginCard.Header>
+      <LoginCard.Body>
+        <Formik
+          validateOnBlur
+          initialValues={initialFormValues}
+          validationSchema={LoginFormSchema}
+          onSubmit={handleLogin}
+        >
+          {(props: FormikProps<LoginFormValues>) => (
+            <Form>
+              <BootstrapForm.Group controlId="email">
+                <BootstrapForm.Label>Email</BootstrapForm.Label>
+                <BootstrapForm.Control
+                  placeholder="Enter email"
+                  type="email"
+                  value={props.values.email}
+                  onBlur={props.handleBlur}
+                  onChange={props.handleChange}
+                />
+                {props.touched.email !== undefined && props.errors.email && (
+                  <BootstrapForm.Text className="text-danger">
+                    {props.errors.email}
+                  </BootstrapForm.Text>
+                )}
+              </BootstrapForm.Group>
 
-                <BootstrapForm.Group controlId="password">
-                  <BootstrapForm.Label>Password</BootstrapForm.Label>
-                  <BootstrapForm.Control
-                    placeholder="Password"
-                    type="password"
-                    value={props.values.password}
-                    onBlur={props.handleBlur}
-                    onChange={props.handleChange}
-                  />
-                  {props.touched.password !== undefined && props.errors.password && (
-                    <BootstrapForm.Text className="text-danger">
-                      {props.errors.password}
-                    </BootstrapForm.Text>
-                  )}
-                </BootstrapForm.Group>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <LoginButton type="submit">Login</LoginButton>
-                <Button variant="secondary" onClick={handleRegisterClick}>
-                  Register
-                </Button>
-              </Col>
-            </Row>
-          </Container>
-        </Form>
-      )}
-    </Formik>
+              <BootstrapForm.Group controlId="password">
+                <BootstrapForm.Label>Password</BootstrapForm.Label>
+                <BootstrapForm.Control
+                  placeholder="Password"
+                  type="password"
+                  value={props.values.password}
+                  onBlur={props.handleBlur}
+                  onChange={props.handleChange}
+                />
+                {props.touched.password !== undefined && props.errors.password && (
+                  <BootstrapForm.Text className="text-danger">
+                    {props.errors.password}
+                  </BootstrapForm.Text>
+                )}
+              </BootstrapForm.Group>
+              <LoginButton type="submit">Login</LoginButton>
+            </Form>
+          )}
+        </Formik>
+      </LoginCard.Body>
+      <LoginCard.Footer>
+        Need an account? <Link to="/register">Register</Link> now.
+      </LoginCard.Footer>
+    </LoginCard>
   )
 }

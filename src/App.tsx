@@ -3,7 +3,6 @@ import {Routes} from 'Routes'
 import {AuthProvider} from 'auth/context/provider'
 import {Header} from 'components/Header'
 import React from 'react'
-import {Container} from 'react-bootstrap'
 import {BrowserRouter} from 'react-router-dom'
 
 import {ThemeProvider} from 'styled-components'
@@ -14,16 +13,14 @@ import {theme} from 'theme'
  * @return Render App
  */
 const App = () => (
-  <AuthProvider>
-    <BrowserRouter>
-      <ThemeProvider theme={theme}>
-        <Container fluid>
-          <Header />
-          <Routes />
-        </Container>
-      </ThemeProvider>
-    </BrowserRouter>
-  </AuthProvider>
+  <BrowserRouter>
+    <ThemeProvider theme={theme}>
+      <AuthProvider>
+        <Header />
+        <Routes />
+      </AuthProvider>
+    </ThemeProvider>
+  </BrowserRouter>
 )
 
 /**
