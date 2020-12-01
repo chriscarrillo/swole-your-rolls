@@ -2,9 +2,9 @@ import {noop} from 'lodash'
 import {createContext} from 'react'
 
 /**
- * Authentication information.
+ * Firebase information.
  */
-export interface AuthContext {
+export interface FirebaseContext {
   isLoggedIn: boolean
   login(email: string, password: string): void
   logout(): void
@@ -14,7 +14,7 @@ export interface AuthContext {
 /**
  * Default context.
  */
-export const DEFAULT_CONTEXT: AuthContext = {
+export const DEFAULT_CONTEXT: FirebaseContext = {
   isLoggedIn: false,
   login: noop,
   logout: noop,
@@ -24,7 +24,7 @@ export const DEFAULT_CONTEXT: AuthContext = {
 /**
  * Context implementation.
  */
-export const AuthContext = createContext(DEFAULT_CONTEXT)
+export const FirebaseContext = createContext(DEFAULT_CONTEXT)
 
 // eslint-disable-next-line functional/immutable-data
-AuthContext.displayName = 'Auth'
+FirebaseContext.displayName = 'Firebase'

@@ -1,12 +1,12 @@
+import firebase from 'firebase/service'
 import {useCallback, useMemo, useState} from 'react'
-import firebase from 'services/firebase'
-import {AuthContext} from '.'
+import {FirebaseContext} from '.'
 
 /**
  * Construct default authentication context.
  * @return Authentication context.
  */
-export const useAuthentication = () => {
+export const useFirebase = () => {
   /**
    * States.
    */
@@ -62,7 +62,7 @@ export const useAuthentication = () => {
       })
   }, [])
 
-  return useMemo<AuthContext>(
+  return useMemo<FirebaseContext>(
     () => ({
       isLoggedIn,
       login,

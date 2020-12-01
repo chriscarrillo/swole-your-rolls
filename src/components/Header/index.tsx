@@ -1,4 +1,4 @@
-import {AuthContext} from 'auth/context'
+import {FirebaseContext} from 'firebase/context'
 import React, {useContext} from 'react'
 import {Container as BootstrapContainer, Row as BootstrapRow, Col, Navbar} from 'react-bootstrap'
 import styled from 'styled-components'
@@ -32,7 +32,7 @@ export const Header: React.FC = () => {
   /**
    * Contexts.
    */
-  const {isLoggedIn} = useContext(AuthContext)
+  const {isLoggedIn} = useContext(FirebaseContext)
 
   const title = isLoggedIn ? <h1>Swole Your Roles | Welcome</h1> : <h1>Swole Your Rolls</h1>
   return (

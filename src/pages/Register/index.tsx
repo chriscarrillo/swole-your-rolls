@@ -1,4 +1,4 @@
-import {AuthContext} from 'auth/context'
+import {FirebaseContext} from 'firebase/context'
 import {Form, Formik, FormikProps} from 'formik'
 import {RegisterFormValues} from 'models/FormValues'
 import React, {useCallback, useContext} from 'react'
@@ -44,7 +44,7 @@ export const RegisterPage: React.FC = () => {
   /**
    * Contexts.
    */
-  const {register} = useContext(AuthContext)
+  const {register} = useContext(FirebaseContext)
 
   /**
    * Callbacks.

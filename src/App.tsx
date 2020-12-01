@@ -1,7 +1,7 @@
 import {Routes} from 'Routes'
 
-import {AuthProvider} from 'auth/context/provider'
 import {Header} from 'components/Header'
+import {FirebaseProvider} from 'firebase/context/provider'
 import React from 'react'
 import {BrowserRouter} from 'react-router-dom'
 
@@ -15,10 +15,10 @@ import {theme} from 'theme'
 const App = () => (
   <BrowserRouter>
     <ThemeProvider theme={theme}>
-      <AuthProvider>
+      <FirebaseProvider>
         <Header />
         <Routes />
-      </AuthProvider>
+      </FirebaseProvider>
     </ThemeProvider>
   </BrowserRouter>
 )

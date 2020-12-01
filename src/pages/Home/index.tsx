@@ -1,4 +1,4 @@
-import {AuthContext} from 'auth/context'
+import {FirebaseContext} from 'firebase/context'
 
 import React, {useContext} from 'react'
 import {Button} from 'react-bootstrap'
@@ -11,7 +11,7 @@ export const HomePage = () => {
   /**
    * Contexts.
    */
-  const {logout} = useContext(AuthContext)
+  const {logout} = useContext(FirebaseContext)
 
   return (
     <>

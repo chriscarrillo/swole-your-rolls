@@ -1,4 +1,4 @@
-import {AuthContext} from 'auth/context'
+import {FirebaseContext} from 'firebase/context'
 import {HomePage} from 'pages/Home'
 import {LoginPage} from 'pages/Login'
 import {RegisterPage} from 'pages/Register'
@@ -13,7 +13,7 @@ export const Routes: React.FC = () => {
   /**
    * Contexts.
    */
-  const {isLoggedIn} = useContext(AuthContext)
+  const {isLoggedIn} = useContext(FirebaseContext)
 
   const loggedInRoutes = () => (
     <Switch>
