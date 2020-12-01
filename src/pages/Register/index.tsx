@@ -2,7 +2,7 @@ import {FirebaseContext} from 'firebase/context'
 import {Form, Formik, FormikProps} from 'formik'
 import {RegisterFormValues} from 'models/FormValues'
 import React, {useCallback, useContext} from 'react'
-import {Form as BootstrapForm, Button, Card} from 'react-bootstrap'
+import {Form as BootstrapForm, Button, Card, Container} from 'react-bootstrap'
 import {Link} from 'react-router-dom'
 import styled from 'styled-components'
 import * as Yup from 'yup'
@@ -57,68 +57,70 @@ export const RegisterPage: React.FC = () => {
   )
 
   return (
-    <RegisterCard>
-      <RegisterCard.Header as="h3">Register</RegisterCard.Header>
-      <RegisterCard.Body>
-        <Formik
-          validateOnBlur
-          initialValues={initialFormValues}
-          validationSchema={RegisterFormSchema}
-          onSubmit={handleRegister}
-        >
-          {(props: FormikProps<RegisterFormValues>) => (
-            <Form>
-              <BootstrapForm.Group controlId="email">
-                <BootstrapForm.Label>Email</BootstrapForm.Label>
-                <BootstrapForm.Control
-                  placeholder="Enter email"
-                  type="email"
-                  value={props.values.email}
-                  onBlur={props.handleBlur}
-                  onChange={props.handleChange}
-                />
-                {props.touched.email !== undefined && props.errors.email && (
-                  <BootstrapForm.Text className="text-danger">
-                    {props.errors.email}
-                  </BootstrapForm.Text>
-                )}
-              </BootstrapForm.Group>
+    <Container>
+      <RegisterCard>
+        <RegisterCard.Header as="h3">Register</RegisterCard.Header>
+        <RegisterCard.Body>
+          <Formik
+            validateOnBlur
+            initialValues={initialFormValues}
+            validationSchema={RegisterFormSchema}
+            onSubmit={handleRegister}
+          >
+            {(props: FormikProps<RegisterFormValues>) => (
+              <Form>
+                <BootstrapForm.Group controlId="email">
+                  <BootstrapForm.Label>Email</BootstrapForm.Label>
+                  <BootstrapForm.Control
+                    placeholder="Enter email"
+                    type="email"
+                    value={props.values.email}
+                    onBlur={props.handleBlur}
+                    onChange={props.handleChange}
+                  />
+                  {props.touched.email !== undefined && props.errors.email && (
+                    <BootstrapForm.Text className="text-danger">
+                      {props.errors.email}
+                    </BootstrapForm.Text>
+                  )}
+                </BootstrapForm.Group>
 
-              <BootstrapForm.Group controlId="password">
-                <BootstrapForm.Label>Password</BootstrapForm.Label>
-                <BootstrapForm.Control
-                  placeholder="Password"
-                  type="password"
-                  value={props.values.password}
-                  onBlur={props.handleBlur}
-                  onChange={props.handleChange}
-                />
-                {props.touched.password !== undefined && props.errors.password && (
-                  <FormError>{props.errors.password}</FormError>
-                )}
-              </BootstrapForm.Group>
+                <BootstrapForm.Group controlId="password">
+                  <BootstrapForm.Label>Password</BootstrapForm.Label>
+                  <BootstrapForm.Control
+                    placeholder="Password"
+                    type="password"
+                    value={props.values.password}
+                    onBlur={props.handleBlur}
+                    onChange={props.handleChange}
+                  />
+                  {props.touched.password !== undefined && props.errors.password && (
+                    <FormError>{props.errors.password}</FormError>
+                  )}
+                </BootstrapForm.Group>
 
-              <BootstrapForm.Group controlId="confirmPassword">
-                <BootstrapForm.Label>Confirm Password</BootstrapForm.Label>
-                <BootstrapForm.Control
-                  placeholder="Confirm Password"
-                  type="password"
-                  value={props.values.confirmPassword}
-                  onBlur={props.handleBlur}
-                  onChange={props.handleChange}
-                />
-                {props.touched.confirmPassword !== undefined && props.errors.confirmPassword && (
-                  <FormError>{props.errors.confirmPassword}</FormError>
-                )}
-              </BootstrapForm.Group>
-              <RegisterButton type="submit">Register</RegisterButton>
-            </Form>
-          )}
-        </Formik>
-      </RegisterCard.Body>
-      <RegisterCard.Footer>
-        Already have an account? <Link to="/login">Login</Link> now.
-      </RegisterCard.Footer>
-    </RegisterCard>
+                <BootstrapForm.Group controlId="confirmPassword">
+                  <BootstrapForm.Label>Confirm Password</BootstrapForm.Label>
+                  <BootstrapForm.Control
+                    placeholder="Confirm Password"
+                    type="password"
+                    value={props.values.confirmPassword}
+                    onBlur={props.handleBlur}
+                    onChange={props.handleChange}
+                  />
+                  {props.touched.confirmPassword !== undefined && props.errors.confirmPassword && (
+                    <FormError>{props.errors.confirmPassword}</FormError>
+                  )}
+                </BootstrapForm.Group>
+                <RegisterButton type="submit">Register</RegisterButton>
+              </Form>
+            )}
+          </Formik>
+        </RegisterCard.Body>
+        <RegisterCard.Footer>
+          Already have an account? <Link to="/login">Login</Link> now.
+        </RegisterCard.Footer>
+      </RegisterCard>
+    </Container>
   )
 }

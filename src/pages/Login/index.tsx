@@ -2,7 +2,7 @@ import {FirebaseContext} from 'firebase/context'
 import {Form, Formik, FormikProps} from 'formik'
 import {LoginFormValues} from 'models/FormValues'
 import React, {useCallback, useContext} from 'react'
-import {Form as BootstrapForm, Button, Card} from 'react-bootstrap'
+import {Form as BootstrapForm, Button, Card, Container} from 'react-bootstrap'
 import {Link} from 'react-router-dom'
 import styled from 'styled-components'
 import * as Yup from 'yup'
@@ -47,56 +47,58 @@ export const LoginPage = () => {
   )
 
   return (
-    <LoginCard>
-      <LoginCard.Header as="h3">Login</LoginCard.Header>
-      <LoginCard.Body>
-        <Formik
-          validateOnBlur
-          initialValues={initialFormValues}
-          validationSchema={LoginFormSchema}
-          onSubmit={handleLogin}
-        >
-          {(props: FormikProps<LoginFormValues>) => (
-            <Form>
-              <BootstrapForm.Group controlId="email">
-                <BootstrapForm.Label>Email</BootstrapForm.Label>
-                <BootstrapForm.Control
-                  placeholder="Enter email"
-                  type="email"
-                  value={props.values.email}
-                  onBlur={props.handleBlur}
-                  onChange={props.handleChange}
-                />
-                {props.touched.email !== undefined && props.errors.email && (
-                  <BootstrapForm.Text className="text-danger">
-                    {props.errors.email}
-                  </BootstrapForm.Text>
-                )}
-              </BootstrapForm.Group>
+    <Container fluid>
+      <LoginCard>
+        <LoginCard.Header as="h3">Login</LoginCard.Header>
+        <LoginCard.Body>
+          <Formik
+            validateOnBlur
+            initialValues={initialFormValues}
+            validationSchema={LoginFormSchema}
+            onSubmit={handleLogin}
+          >
+            {(props: FormikProps<LoginFormValues>) => (
+              <Form>
+                <BootstrapForm.Group controlId="email">
+                  <BootstrapForm.Label>Email</BootstrapForm.Label>
+                  <BootstrapForm.Control
+                    placeholder="Enter email"
+                    type="email"
+                    value={props.values.email}
+                    onBlur={props.handleBlur}
+                    onChange={props.handleChange}
+                  />
+                  {props.touched.email !== undefined && props.errors.email && (
+                    <BootstrapForm.Text className="text-danger">
+                      {props.errors.email}
+                    </BootstrapForm.Text>
+                  )}
+                </BootstrapForm.Group>
 
-              <BootstrapForm.Group controlId="password">
-                <BootstrapForm.Label>Password</BootstrapForm.Label>
-                <BootstrapForm.Control
-                  placeholder="Password"
-                  type="password"
-                  value={props.values.password}
-                  onBlur={props.handleBlur}
-                  onChange={props.handleChange}
-                />
-                {props.touched.password !== undefined && props.errors.password && (
-                  <BootstrapForm.Text className="text-danger">
-                    {props.errors.password}
-                  </BootstrapForm.Text>
-                )}
-              </BootstrapForm.Group>
-              <LoginButton type="submit">Login</LoginButton>
-            </Form>
-          )}
-        </Formik>
-      </LoginCard.Body>
-      <LoginCard.Footer>
-        Need an account? <Link to="/register">Register</Link> now.
-      </LoginCard.Footer>
-    </LoginCard>
+                <BootstrapForm.Group controlId="password">
+                  <BootstrapForm.Label>Password</BootstrapForm.Label>
+                  <BootstrapForm.Control
+                    placeholder="Password"
+                    type="password"
+                    value={props.values.password}
+                    onBlur={props.handleBlur}
+                    onChange={props.handleChange}
+                  />
+                  {props.touched.password !== undefined && props.errors.password && (
+                    <BootstrapForm.Text className="text-danger">
+                      {props.errors.password}
+                    </BootstrapForm.Text>
+                  )}
+                </BootstrapForm.Group>
+                <LoginButton type="submit">Login</LoginButton>
+              </Form>
+            )}
+          </Formik>
+        </LoginCard.Body>
+        <LoginCard.Footer>
+          Need an account? <Link to="/register">Register</Link> now.
+        </LoginCard.Footer>
+      </LoginCard>
+    </Container>
   )
 }

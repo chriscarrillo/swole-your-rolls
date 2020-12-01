@@ -1,0 +1,51 @@
+@import 'src/theme/variables';
+
+.bm-menu-wrap {
+  position: fixed;
+  height: 100%;
+  top: 0;
+  left: 0;
+  width: 403px;
+}
+
+.bm-overlay {
+  top: 0;
+}
+
+.bm-burger-button {
+  position: relative;
+  width: 35px;
+  height: 40px;
+  display: none;
+
+  @media (max-width: 1200px) {
+    display: block;
+  }
+}
+
+.bm-cross-button {
+  height: 24px;
+  width: 24px;
+  left: 25px;
+  top: 20px !important;
+}
+
+/* Color/shape of close button cross */
+.bm-cross {
+  background: $light;
+  width: 2px !important;
+  border-radius: 2px;
+  height: 25px !important;
+}
+
+.bm-cross-button:hover .bm-cross {
+  background-color: $primary;
+}
+
+/* General sidebar styles */
+.bm-menu {
+  background: $secondary;
+  padding: 0;
+  padding-top: 75px;
+  font-size: 1rem;
+}
