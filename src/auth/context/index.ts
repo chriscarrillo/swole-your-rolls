@@ -8,6 +8,7 @@ export interface AuthContext {
   isLoggedIn: boolean
   login(email: string, password: string): void
   logout(): void
+  register(email: string, password: string): void
 }
 
 /**
@@ -17,6 +18,7 @@ export const DEFAULT_CONTEXT: AuthContext = {
   isLoggedIn: false,
   login: noop,
   logout: noop,
+  register: noop,
 }
 
 /**

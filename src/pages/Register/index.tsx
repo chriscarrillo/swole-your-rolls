@@ -1,32 +1,31 @@
 import {AuthContext} from 'auth/context'
-
 import {Form, Formik, FormikProps} from 'formik'
-import {LoginFormValues} from 'models/FormValues'
+import {RegisterFormValues} from 'models/FormValues'
 import React, {useCallback, useContext} from 'react'
 import {Form as BootstrapForm, Button, Col, Container, Row} from 'react-bootstrap'
 import {useHistory} from 'react-router'
 import styled from 'styled-components'
 import * as Yup from 'yup'
 
-const LoginButton = styled(Button)`
+const RegisterButton = styled(Button)`
   margin-right: ${({theme}) => theme.spacers[2]};
 `
 
-const initialFormValues: LoginFormValues = {
+const initialFormValues: RegisterFormValues = {
   email: '',
   password: '',
 }
 
-const LoginFormSchema = Yup.object().shape({
+const RegisterFormSchema = Yup.object().shape({
   email: Yup.string().required('An email is required'),
   password: Yup.string().required('A password is required'),
 })
 
 /**
- * Login page.
- * @return Rendered Login page
+ * Register page so users can use the app.
+ * @return Register page
  */
-export const LoginPage = () => {
+export const RegisterPage: React.FC = () => {
   /**
    * Special hooks.
    */
@@ -35,30 +34,30 @@ export const LoginPage = () => {
   /**
    * Contexts.
    */
-  const {login} = useContext(AuthContext)
+  const {register} = useContext(AuthContext)
 
   /**
    * Callbacks.
    */
-  const handleLogin = useCallback(
-    (formValues: LoginFormValues) => {
-      login(formValues.email, formValues.password)
+  const handleRegister = useCallback(
+    (formValues: RegisterFormValues) => {
+      register(formValues.email, formValues.password)
     },
-    [login],
+    [register],
   )
 
-  const handleRegisterClick = useCallback(() => {
-    history.push('/register')
+  const handleLoginClick = useCallback(() => {
+    history.push('/login')
   }, [history])
 
   return (
     <Formik
       validateOnBlur
       initialValues={initialFormValues}
-      validationSchema={LoginFormSchema}
-      onSubmit={handleLogin}
+      validationSchema={RegisterFormSchema}
+      onSubmit={handleRegister}
     >
-      {(props: FormikProps<LoginFormValues>) => (
+      {(props: FormikProps<RegisterFormValues>) => (
         <Form>
           <Container>
             <Row>
@@ -98,9 +97,9 @@ export const LoginPage = () => {
             </Row>
             <Row>
               <Col>
-                <LoginButton type="submit">Login</LoginButton>
-                <Button variant="secondary" onClick={handleRegisterClick}>
-                  Register
+                <RegisterButton type="submit">Register</RegisterButton>
+                <Button variant="secondary" onClick={handleLoginClick}>
+                  Login
                 </Button>
               </Col>
             </Row>

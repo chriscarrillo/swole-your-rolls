@@ -50,12 +50,25 @@ export const useAuthentication = () => {
     }
   }, [isLoggedIn, setIsLoggedIn])
 
+  const register = useCallback((email: string, password: string) => {
+    firebase
+      .auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then(response => {
+        console.log('registered', response)
+      })
+      .catch(error => {
+        console.error(error)
+      })
+  }, [])
+
   return useMemo<AuthContext>(
     () => ({
       isLoggedIn,
       login,
       logout,
+      register,
     }),
-    [isLoggedIn, login, logout],
+    [isLoggedIn, login, logout, register],
   )
 }
