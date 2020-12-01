@@ -1,3 +1,8 @@
+'use strict'
+
 module.exports = {
-    ...require('@chriscarrillo/ts/lint')
+  extends: './node_modules/@chriscarrillo/ts/lint',
+  rules: {
+    '@typescript-eslint/unbound-method': 'off',
   }
+}

@@ -15,23 +15,26 @@ export const useAuthentication = () => {
   /**
    * Callbacks.
    */
-  const login = useCallback(() => {
-    if (isLoggedIn) {
-      return
-    }
+  const login = useCallback(
+    (email: string, password: string) => {
+      if (isLoggedIn) {
+        return
+      }
 
-    firebase
-      .auth()
-      .signInWithEmailAndPassword('chris.carrillo217@gmail.com', 'password')
-      .then(response => {
-        if (response.user) {
-          setIsLoggedIn(true)
-        }
-      })
-      .catch(error => {
-        console.error(error)
-      })
-  }, [isLoggedIn, setIsLoggedIn])
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(email, password)
+        .then(response => {
+          if (response.user) {
+            setIsLoggedIn(true)
+          }
+        })
+        .catch(error => {
+          console.error(error)
+        })
+    },
+    [isLoggedIn, setIsLoggedIn],
+  )
 
   const logout = useCallback(() => {
     if (isLoggedIn) {

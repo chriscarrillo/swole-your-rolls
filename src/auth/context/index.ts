@@ -6,7 +6,7 @@ import {createContext} from 'react'
  */
 export interface AuthContext {
   isLoggedIn: boolean
-  login(): void
+  login(email: string, password: string): void
   logout(): void
 }
 
