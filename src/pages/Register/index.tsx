@@ -1,9 +1,9 @@
 import {FirebaseContext} from 'firebase/context'
 import {Form, Formik, FormikProps} from 'formik'
 import {RegisterFormValues} from 'models/FormValues'
-import React, {useCallback, useContext} from 'react'
+import React, {useCallback, useContext, useMemo, useState} from 'react'
 import {Form as BootstrapForm, Button, Card, Container} from 'react-bootstrap'
-import {Link} from 'react-router-dom'
+import {Link, useHistory} from 'react-router-dom'
 import styled from 'styled-components'
 import * as Yup from 'yup'
 
@@ -20,8 +20,18 @@ const RegisterButton = styled(Button)`
   margin-right: ${({theme}) => theme.spacers[2]};
 `
 
+const RegisterError = styled.span`
+  display: block;
+  color: ${({theme}) => theme.colors.danger};
+`
+
+const RegisterMessage = styled(RegisterError)`
+  color: ${({theme}) => theme.colors.success};
+`
+
 const initialFormValues: RegisterFormValues = {
   confirmPassword: '',
+  displayName: '',
   email: '',
   password: '',
 }
@@ -32,6 +42,7 @@ const RegisterFormSchema = Yup.object().shape({
     .test('match', 'Passwords must match', function () {
       return this.parent.password === this.parent.confirmPassword
     }),
+  displayName: Yup.string().required('Display name is required'),
   email: Yup.string().email().required('An email is required'),
   password: Yup.string().required('Password is required'),
 })
@@ -42,19 +53,45 @@ const RegisterFormSchema = Yup.object().shape({
  */
 export const RegisterPage: React.FC = () => {
   /**
+   * Custom hooks.
+   */
+  const history = useHistory()
+
+  /**
    * Contexts.
    */
   const {register} = useContext(FirebaseContext)
 
   /**
+   * States.
+   */
+  const [error, setError] = useState<string | undefined>()
+  const [message, setMessage] = useState<string | undefined>()
+
+  /**
    * Callbacks.
    */
   const handleRegister = useCallback(
-    (formValues: RegisterFormValues) => {
-      register(formValues.email, formValues.password)
+    async (formValues: RegisterFormValues) => {
+      const response = await register(formValues.displayName, formValues.email, formValues.password)
+      if (response?.status === 'SUCCESS' && response.message !== undefined) {
+        setMessage(response.message)
+        setError(undefined)
+        history.push('/login')
+      }
+      if (response?.status === 'ERROR') {
+        setError(response.error)
+        setMessage(undefined)
+      }
     },
-    [register],
+    [history, register, setError, setMessage],
   )
+
+  /**
+   * Memos.
+   */
+  const errorElement = useMemo(() => <RegisterError>{error}</RegisterError>, [error])
+  const messageElement = useMemo(() => <RegisterMessage>{message}</RegisterMessage>, [message])
 
   return (
     <Container>
@@ -69,6 +106,22 @@ export const RegisterPage: React.FC = () => {
           >
             {(props: FormikProps<RegisterFormValues>) => (
               <Form>
+                <BootstrapForm.Group controlId="displayName">
+                  <BootstrapForm.Label>Display Name</BootstrapForm.Label>
+                  <BootstrapForm.Control
+                    placeholder="Enter display name"
+                    type="text"
+                    value={props.values.displayName}
+                    onBlur={props.handleBlur}
+                    onChange={props.handleChange}
+                  />
+                  {props.touched.displayName !== undefined && props.errors.displayName && (
+                    <BootstrapForm.Text className="text-danger">
+                      {props.errors.displayName}
+                    </BootstrapForm.Text>
+                  )}
+                </BootstrapForm.Group>
+
                 <BootstrapForm.Group controlId="email">
                   <BootstrapForm.Label>Email</BootstrapForm.Label>
                   <BootstrapForm.Control
@@ -111,6 +164,8 @@ export const RegisterPage: React.FC = () => {
                   {props.touched.confirmPassword !== undefined && props.errors.confirmPassword && (
                     <FormError>{props.errors.confirmPassword}</FormError>
                   )}
+                  {errorElement}
+                  {messageElement}
                 </BootstrapForm.Group>
                 <RegisterButton type="submit">Register</RegisterButton>
               </Form>

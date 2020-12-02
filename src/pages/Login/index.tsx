@@ -1,7 +1,7 @@
 import {FirebaseContext} from 'firebase/context'
 import {Form, Formik, FormikProps} from 'formik'
 import {LoginFormValues} from 'models/FormValues'
-import React, {useCallback, useContext} from 'react'
+import React, {useCallback, useContext, useMemo, useState} from 'react'
 import {Form as BootstrapForm, Button, Card, Container} from 'react-bootstrap'
 import {Link} from 'react-router-dom'
 import styled from 'styled-components'
@@ -14,6 +14,11 @@ const LoginCard = styled(Card)`
 
 const LoginButton = styled(Button)`
   margin-right: ${({theme}) => theme.spacers[2]};
+`
+
+const LoginError = styled.span`
+  display: block;
+  color: ${({theme}) => theme.colors.danger};
 `
 
 const initialFormValues: LoginFormValues = {
@@ -37,14 +42,27 @@ export const LoginPage = () => {
   const {login} = useContext(FirebaseContext)
 
   /**
+   * States.
+   */
+  const [error, setError] = useState<string | undefined>()
+
+  /**
    * Callbacks.
    */
   const handleLogin = useCallback(
-    (formValues: LoginFormValues) => {
-      login(formValues.email, formValues.password)
+    async (formValues: LoginFormValues) => {
+      const response = await login(formValues.email, formValues.password)
+      if (response?.status === 'ERROR') {
+        setError(response.error)
+      }
     },
-    [login],
+    [login, setError],
   )
+
+  /**
+   * Memos.
+   */
+  const errorElement = useMemo(() => <LoginError>{error}</LoginError>, [error])
 
   return (
     <Container fluid>
@@ -89,6 +107,7 @@ export const LoginPage = () => {
                       {props.errors.password}
                     </BootstrapForm.Text>
                   )}
+                  {errorElement}
                 </BootstrapForm.Group>
                 <LoginButton type="submit">Login</LoginButton>
               </Form>

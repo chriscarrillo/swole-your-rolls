@@ -1,4 +1,5 @@
-import {noop} from 'lodash'
+import {RequestState, User} from 'firebase/models/types'
+import {constant, noop} from 'lodash'
 import {createContext} from 'react'
 
 /**
@@ -6,9 +7,10 @@ import {createContext} from 'react'
  */
 export interface FirebaseContext {
   isLoggedIn: boolean
-  login(email: string, password: string): void
+  user: User | undefined
+  login(email: string, password: string): Promise<RequestState | undefined>
   logout(): void
-  register(email: string, password: string): void
+  register(displayName: string, email: string, password: string): Promise<RequestState | undefined>
 }
 
 /**
@@ -16,9 +18,10 @@ export interface FirebaseContext {
  */
 export const DEFAULT_CONTEXT: FirebaseContext = {
   isLoggedIn: false,
-  login: noop,
+  login: constant(Promise.resolve(undefined)),
   logout: noop,
-  register: noop,
+  register: constant(Promise.resolve(undefined)),
+  user: undefined,
 }
 
 /**

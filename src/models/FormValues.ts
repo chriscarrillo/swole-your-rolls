@@ -10,6 +10,7 @@ export interface LoginFormValues {
  * Register form values for Firebase.
  */
 export interface RegisterFormValues {
+  displayName: string
   email: string
   password: string
   confirmPassword: string

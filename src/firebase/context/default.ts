@@ -1,3 +1,4 @@
+import {RequestState, User} from 'firebase/models/types'
 import firebase from 'firebase/service'
 import {useCallback, useMemo, useState} from 'react'
 import {FirebaseContext} from '.'
@@ -11,29 +12,44 @@ export const useFirebase = () => {
    * States.
    */
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [user, setUser] = useState<User | undefined>()
 
   /**
    * Callbacks.
    */
   const login = useCallback(
-    (email: string, password: string) => {
+    async (email: string, password: string) => {
       if (isLoggedIn) {
         return
       }
 
-      firebase
+      let loginState: RequestState = {error: 'ERROR', status: 'ERROR'}
+
+      await firebase
         .auth()
         .signInWithEmailAndPassword(email, password)
         .then(response => {
           if (response.user) {
+            loginState = {
+              status: 'SUCCESS',
+            }
             setIsLoggedIn(true)
+            setUser({
+              displayName: response.user.displayName ?? '',
+              uid: response.user.uid,
+            })
           }
         })
         .catch(error => {
           console.error(error)
+          loginState = {
+            error: error.message,
+            status: 'ERROR',
+          }
         })
+      return loginState
     },
-    [isLoggedIn, setIsLoggedIn],
+    [isLoggedIn, setIsLoggedIn, setUser],
   )
 
   const logout = useCallback(() => {
@@ -50,17 +66,46 @@ export const useFirebase = () => {
     }
   }, [isLoggedIn, setIsLoggedIn])
 
-  const register = useCallback((email: string, password: string) => {
-    firebase
-      .auth()
-      .createUserWithEmailAndPassword(email, password)
-      .then(response => {
-        console.log('registered', response)
-      })
-      .catch(error => {
-        console.error(error)
-      })
-  }, [])
+  const register = useCallback(
+    async (displayName: string, email: string, password: string) => {
+      if (isLoggedIn) {
+        return
+      }
+
+      let registerState: RequestState = {error: 'ERROR', status: 'ERROR'}
+
+      await firebase
+        .auth()
+        .createUserWithEmailAndPassword(email, password)
+        .then(async response => {
+          if (response.user) {
+            await response.user.updateProfile({displayName}).then(
+              () => {
+                registerState = {
+                  message: 'Registration successful.',
+                  status: 'SUCCESS',
+                }
+              },
+              error => {
+                registerState = {
+                  error: error.message,
+                  status: 'ERROR',
+                }
+              },
+            )
+          }
+        })
+        .catch(error => {
+          console.error(error)
+          registerState = {
+            error: error.message,
+            status: 'ERROR',
+          }
+        })
+      return registerState
+    },
+    [isLoggedIn],
+  )
 
   return useMemo<FirebaseContext>(
     () => ({
@@ -68,7 +113,8 @@ export const useFirebase = () => {
       login,
       logout,
       register,
+      user,
     }),
-    [isLoggedIn, login, logout, register],
+    [isLoggedIn, login, logout, register, user],
   )
 }

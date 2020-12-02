@@ -18,7 +18,7 @@ const HeaderContainer = styled.header`
   color: ${({theme}) => theme.colors.light};
   padding-left: ${({theme}) => theme.spacers[2]};
   padding-right: ${({theme}) => theme.spacers[2]};
-  margin-bottom: ${({theme}) => theme.spacers[3]};
+  margin-bottom: ${({theme}) => theme.spacers[2]};
 `
 
 const HeaderTitle = styled.h2`
