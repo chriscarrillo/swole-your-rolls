@@ -52,7 +52,7 @@ export const LoginPage = () => {
   const handleLogin = useCallback(
     async (formValues: LoginFormValues) => {
       const response = await login(formValues.email, formValues.password)
-      if (response?.status === 'ERROR') {
+      if (response.status === 'ERROR') {
         setError(response.error)
       }
     },

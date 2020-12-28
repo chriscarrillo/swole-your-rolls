@@ -1,4 +1,4 @@
-import {RequestState, User} from 'firebase/models/types'
+import {MealPlan, RequestState, User} from 'firebase/models/types'
 import {constant, noop} from 'lodash'
 import {createContext} from 'react'
 
@@ -6,21 +6,27 @@ import {createContext} from 'react'
  * Firebase information.
  */
 export interface FirebaseContext {
+  activeMealPlan: MealPlan | undefined
   isLoggedIn: boolean
+  mealPlans: MealPlan[]
   user: User | undefined
-  login(email: string, password: string): Promise<RequestState | undefined>
-  logout(): void
-  register(displayName: string, email: string, password: string): Promise<RequestState | undefined>
+  login(email: string, password: string): Promise<RequestState>
+  logout(): Promise<void>
+  register(displayName: string, email: string, password: string): Promise<RequestState>
+  setActiveMealPlan(mealPlan: MealPlan): void
 }
 
 /**
  * Default context.
  */
 export const DEFAULT_CONTEXT: FirebaseContext = {
+  activeMealPlan: undefined,
   isLoggedIn: false,
-  login: constant(Promise.resolve(undefined)),
-  logout: noop,
-  register: constant(Promise.resolve(undefined)),
+  login: constant(Promise.resolve({error: 'ERROR', status: 'ERROR'})),
+  logout: constant(Promise.resolve()),
+  mealPlans: [],
+  register: constant(Promise.resolve({error: 'ERROR', status: 'ERROR'})),
+  setActiveMealPlan: noop,
   user: undefined,
 }
 

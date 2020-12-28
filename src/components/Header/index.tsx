@@ -89,13 +89,8 @@ export const Header: React.FC = () => {
     <nav>
       <NavMenu>
         <NavMenuLinkItem>
-          <NavMenuLink exact activeClassName="text-primary" to="/home">
+          <NavMenuLink exact activeClassName="text-primary" to="/">
             Meal Plans
-          </NavMenuLink>
-        </NavMenuLinkItem>
-        <NavMenuLinkItem>
-          <NavMenuLink exact activeClassName="text-primary" to="/workout-plans">
-            Workout Plans
           </NavMenuLink>
         </NavMenuLinkItem>
         <NavMenuLinkItem>
@@ -115,7 +110,7 @@ export const Header: React.FC = () => {
   return (
     <HeaderContainer>
       {hamburgerMenu}
-      <Container>
+      <Container fluid>
         <Row>
           <Col lg={12} xl={5}>
             <HeaderTitle>Swole Your Rolls</HeaderTitle>

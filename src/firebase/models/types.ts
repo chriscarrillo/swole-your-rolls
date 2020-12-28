@@ -18,5 +18,26 @@ interface RequestError {
  */
 export interface User {
   displayName: string
+  email: string
   uid: string
+}
+
+/**
+ * Meal plan for a user.
+ */
+export interface MealPlan {
+  name: string
+  uid: string
+  meals: Meal[]
+}
+
+/**
+ * Meal for a user.
+ */
+export interface Meal {
+  name: string
+  time: Date
+  description: string
+  uid: string
+  mealPlanUid: string
 }

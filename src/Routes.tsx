@@ -17,8 +17,8 @@ export const Routes: React.FC = () => {
 
   const loggedInRoutes = () => (
     <Switch>
-      <Route exact component={HomePage} path="/home" />
-      <Redirect to="/home" />
+      <Route exact component={HomePage} path="/" />
+      <Redirect to="/" />
     </Switch>
   )
   const loggedOutRoutes = () => (

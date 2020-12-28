@@ -74,12 +74,12 @@ export const RegisterPage: React.FC = () => {
   const handleRegister = useCallback(
     async (formValues: RegisterFormValues) => {
       const response = await register(formValues.displayName, formValues.email, formValues.password)
-      if (response?.status === 'SUCCESS' && response.message !== undefined) {
+      if (response.status === 'SUCCESS' && response.message !== undefined) {
         setMessage(response.message)
         setError(undefined)
         history.push('/login')
       }
-      if (response?.status === 'ERROR') {
+      if (response.status === 'ERROR') {
         setError(response.error)
         setMessage(undefined)
       }

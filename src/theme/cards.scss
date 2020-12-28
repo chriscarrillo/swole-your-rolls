@@ -1,0 +1,28 @@
+@use 'variables';
+
+.card-container {
+  width: 100%;
+}
+
+.card {
+  border: 1px solid variables.$border-color-light;
+  border-radius: 10px;
+  padding: variables.$spacing-medium variables.$spacing-small;
+
+  .card-header, .card-footer {
+    background-color: variables.$background-color;
+  }
+
+  .card-header {
+    border-bottom: none;
+
+    h1 {
+      color: variables.$dark;
+      margin-bottom: variables.$spacing-small;
+    }
+  }
+
+  .card-footer {
+    border-top: none;
+  }
+}
