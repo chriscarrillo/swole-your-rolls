@@ -5,14 +5,14 @@ import 'firebase/firestore'
 import 'firebase/auth'
 
 firebase.initializeApp({
-  apiKey: 'AIzaSyCLwAHYAph5aq7Qjm7_VYNIhtZxZ21qet8',
-  appId: '1:921738482671:web:f8fd7594074c9f35315c1a',
-  authDomain: 'swole-your-rolls.firebaseapp.com',
-  databaseURL: 'https://swole-your-rolls.firebaseio.com',
-  measurementId: 'G-7WDEELDZ7L',
-  messagingSenderId: '921738482671',
-  projectId: 'swole-your-rolls',
-  storageBucket: 'swole-your-rolls.appspot.com',
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  databaseURL: process.env.REACT_APP_FIREBASE_DATABASE_URL,
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
 })
 
 /**

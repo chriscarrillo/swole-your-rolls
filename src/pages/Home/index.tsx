@@ -1,16 +1,23 @@
 import {ActiveMealPlan} from 'components/ActiveMealPlan'
 import {MealPlans} from 'components/MealPlans'
 import {FirebaseContext} from 'firebase/context'
+import {mealPlansQuery} from 'firebase/context/default'
+import {MealPlan} from 'firebase/models/types'
 import React, {useContext} from 'react'
 import {Container} from 'react-bootstrap'
+import {useCollectionData} from 'react-firebase-hooks/firestore'
 
 /**
  * Home page.
  * @return Rendered home page
  */
 export const HomePage: React.FC = () => {
-  const {activeMealPlan, mealPlans, setActiveMealPlan, user} = useContext(FirebaseContext)
+  const {activeMealPlan, user} = useContext(FirebaseContext)
+  const [mealPlans] = useCollectionData(mealPlansQuery.where('userUid', '==', user?.uid), {
+    idField: 'uid',
+  })
 
+  const userMealPlans = mealPlans as MealPlan[] | undefined
   if (activeMealPlan) {
     return <ActiveMealPlan mealPlan={activeMealPlan} />
   }
@@ -22,8 +29,8 @@ export const HomePage: React.FC = () => {
       <h1>Meal Plans</h1>
     )
   const mealPlanData =
-    mealPlans.length > 0 ? (
-      <MealPlans mealPlans={mealPlans} onChangeActiveMealPlan={setActiveMealPlan} />
+    userMealPlans !== undefined && userMealPlans.length > 0 ? (
+      <MealPlans mealPlans={userMealPlans} />
     ) : (
       <span>You don&apos;t have any meal plans! Create one now!</span>
     )

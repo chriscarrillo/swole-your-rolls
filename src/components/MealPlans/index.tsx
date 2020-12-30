@@ -1,27 +1,37 @@
-/* eslint-disable react/jsx-no-bind */
+import {AddMealPlanCard} from 'components/AddMealPlanCard'
+import {MealPlanCard} from 'components/MealPlanCard'
 import {MealPlan} from 'firebase/models/types'
 import React from 'react'
-import {Button, Card, Container} from 'react-bootstrap'
+import {CardDeck, Col, Container, Row} from 'react-bootstrap'
 
 interface Props {
   mealPlans: MealPlan[]
-  onChangeActiveMealPlan(mealPlan: MealPlan): void
 }
 
 /**
  * Meal plan table for the main page.
  * @param props Meal plan table properties
+ * @param props.mealPlans Meal plans for the cards
  * @return Meal plan table
  */
-export const MealPlans: React.FC<Props> = (props: Props) => {
-  const mealPlanCards = props.mealPlans.map(plan => (
-    <Card key={plan.uid}>
-      <Card.Body>
-        <h3>{plan.name}</h3>
-        <Button onClick={() => props.onChangeActiveMealPlan(plan)}>Select</Button>
-      </Card.Body>
-    </Card>
-  ))
+export const MealPlans: React.FC<Props> = ({mealPlans}: Props) => {
+  const mealPlanCards = mealPlans.map(plan => {
+    console.log('plan uid', plan.uid)
+    return (
+      <Col key={plan.uid} as={CardDeck} className="mb-2" lg={4} md={6} sm={12}>
+        <MealPlanCard mealPlan={plan} />
+      </Col>
+    )
+  })
 
-  return <Container>{mealPlanCards}</Container>
+  return (
+    <Container>
+      <Row>
+        {mealPlanCards}
+        <Col as={CardDeck} className="mb-2" lg={4} md={6} sm={12}>
+          <AddMealPlanCard />
+        </Col>
+      </Row>
+    </Container>
+  )
 }

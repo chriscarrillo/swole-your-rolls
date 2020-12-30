@@ -1,8 +1,18 @@
 import {Meal, MealPlan, RequestState, User} from 'firebase/models/types'
 import firebase from 'firebase/service'
+import {AddMealPlanValues, AddMealValues} from 'models/FormValues'
 import {useCallback, useEffect, useMemo, useState} from 'react'
-// Import {useCollectionData} from 'react-firebase-hooks/firestore'
 import {FirebaseContext} from '.'
+
+/**
+ * Meal plan query.
+ */
+export const mealPlansQuery = firebase.firestore().collection('mealPlans')
+
+/**
+ * Meals query.
+ */
+export const mealsQuery = firebase.firestore().collection('meals')
 
 /**
  * Construct default authentication context.
@@ -29,11 +39,12 @@ export const useFirebase = () => {
       .get()
 
     mealPlanMeals.forEach(doc => {
+      const {description, mealPlanUid, name, time} = doc.data()
       const newMeal: Meal = {
-        description: doc.data().description,
-        mealPlanUid: doc.data().mealPlanUid,
-        name: doc.data().name,
-        time: doc.data().time.toDate(),
+        description,
+        mealPlanUid,
+        name,
+        time,
         uid: doc.id,
       }
       if (!meals.find(meal => meal.uid === newMeal.uid)) {
@@ -43,22 +54,8 @@ export const useFirebase = () => {
     return meals
   }, [])
 
-  const handleAuthStateChange = useCallback(async () => {
-    const firebaseUser = firebase.auth().currentUser ?? undefined
-    if (firebaseUser !== undefined) {
-      const newUser: User = {
-        displayName: firebaseUser.displayName ?? '',
-        email: firebaseUser.email ?? '',
-        uid: firebaseUser.uid,
-      }
-
-      // Fetch meal plans.
-      const plans = await firebase
-        .firestore()
-        .collection('mealPlans')
-        .where('userUid', '==', newUser.uid)
-        .get()
-
+  const updateMealPlans = useCallback(
+    (plans: firebase.firestore.QuerySnapshot<firebase.firestore.DocumentData>) => {
       plans.forEach(async doc => {
         const plan: MealPlan = {
           meals: await getMealsForMealPlan(doc.id),
@@ -72,12 +69,32 @@ export const useFirebase = () => {
           return [...oldMealPlans, plan]
         })
       })
+    },
+    [getMealsForMealPlan, setMealPlans],
+  )
+
+  const handleAuthStateChange = useCallback(async () => {
+    const firebaseUser = firebase.auth().currentUser ?? undefined
+    if (firebaseUser !== undefined) {
+      const newUser: User = {
+        displayName: firebaseUser.displayName ?? '',
+        email: firebaseUser.email ?? '',
+        uid: firebaseUser.uid,
+      }
+
+      const plans = await firebase
+        .firestore()
+        .collection('mealPlans')
+        .where('userUid', '==', newUser.uid)
+        .get()
+
+      updateMealPlans(plans)
       setUser(newUser)
       setIsLoggedIn(true)
     } else {
       setIsLoggedIn(false)
     }
-  }, [getMealsForMealPlan, setIsLoggedIn, setUser])
+  }, [setIsLoggedIn, setUser, updateMealPlans])
 
   const login = useCallback(
     async (email: string, password: string) => {
@@ -161,6 +178,56 @@ export const useFirebase = () => {
     [mealPlans],
   )
 
+  const addMealPlan = useCallback(
+    async (addMealPlanValues: AddMealPlanValues) => {
+      const planToAdd = {
+        ...addMealPlanValues,
+        userUid: user?.uid,
+      }
+      await firebase.firestore().collection('mealPlans').add(planToAdd)
+      await handleAuthStateChange()
+    },
+    [handleAuthStateChange, user],
+  )
+
+  const addMealToMealPlan = useCallback(async (addMealValues: AddMealValues) => {
+    await firebase.firestore().collection('meals').add(addMealValues)
+  }, [])
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const editMealPlan = useCallback(
+    async (mealPlanUid: string, mealPlanUpdate: Omit<MealPlan, 'uid'>) => {
+      await firebase.firestore().collection('mealPlans').doc(mealPlanUid).update(mealPlanUpdate)
+    },
+    [],
+  )
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const editMealInMealPlan = useCallback(
+    async (mealUid: string, mealUpdate: Omit<Meal, 'uid' | 'mealPlanUid'>) => {
+      await firebase.firestore().collection('meals').doc(mealUid).update(mealUpdate)
+    },
+    [],
+  )
+
+  const deleteMealFromMealPlan = useCallback(async (mealUid: string) => {
+    await firebase.firestore().collection('meals').doc(mealUid).delete()
+  }, [])
+
+  const deleteMealPlan = useCallback(
+    async (mealPlanUid: string) => {
+      // Get all meals associated and delete them
+      const meals = await getMealsForMealPlan(mealPlanUid)
+      meals.forEach(async meal => {
+        await deleteMealFromMealPlan(meal.uid)
+      })
+
+      // Delete the meal plan itself
+      await firebase.firestore().collection('mealPlans').doc(mealPlanUid).delete()
+    },
+    [deleteMealFromMealPlan, getMealsForMealPlan],
+  )
+
   /**
    * Effects.
    */
@@ -169,11 +236,13 @@ export const useFirebase = () => {
     return () => unsubscribe()
   }, [handleAuthStateChange])
 
-  console.log(mealPlans)
-
   return useMemo<FirebaseContext>(
     () => ({
       activeMealPlan,
+      addMealPlan,
+      addMealToMealPlan,
+      deleteMealFromMealPlan,
+      deleteMealPlan,
       isLoggedIn,
       login,
       logout,
@@ -182,6 +251,19 @@ export const useFirebase = () => {
       setActiveMealPlan,
       user,
     }),
-    [activeMealPlan, isLoggedIn, login, logout, mealPlans, register, setActiveMealPlan, user],
+    [
+      activeMealPlan,
+      addMealPlan,
+      addMealToMealPlan,
+      deleteMealFromMealPlan,
+      deleteMealPlan,
+      isLoggedIn,
+      login,
+      logout,
+      mealPlans,
+      register,
+      setActiveMealPlan,
+      user,
+    ],
   )
 }

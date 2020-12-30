@@ -15,3 +15,21 @@ export interface RegisterFormValues {
   password: string
   confirmPassword: string
 }
+
+/**
+ * Add meal values for Firestore.
+ */
+export interface AddMealValues {
+  description: string
+  mealPlanUid: string
+  name: string
+  time: string
+}
+
+/**
+ * Add meal plan values for Firestore.
+ */
+export interface AddMealPlanValues {
+  userUid: string
+  name: string
+}

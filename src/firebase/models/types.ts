@@ -36,7 +36,7 @@ export interface MealPlan {
  */
 export interface Meal {
   name: string
-  time: Date
+  time: string
   description: string
   uid: string
   mealPlanUid: string
