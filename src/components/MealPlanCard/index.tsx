@@ -1,9 +1,12 @@
 import {FirebaseContext} from 'firebase/context'
 import {MealPlan} from 'firebase/models/types'
-import React, {useCallback, useContext, useState} from 'react'
-import {Button, Card, Modal} from 'react-bootstrap'
+import {Form, Formik, FormikHelpers, FormikProps} from 'formik'
+import {AddMealPlanValues} from 'models/FormValues'
+import React, {useCallback, useContext, useMemo, useState} from 'react'
+import {Form as BootstrapForm, Button, Card, Modal} from 'react-bootstrap'
 import {MdDelete, MdEdit} from 'react-icons/md'
 import styled from 'styled-components'
+import * as Yup from 'yup'
 
 interface Props {
   mealPlan: MealPlan
@@ -23,6 +26,10 @@ const DeleteButton = styled(MdDelete)`
   }
 `
 
+const EditMealPlanFormSchema = Yup.object().shape({
+  name: Yup.string().required('A name is required'),
+})
+
 /**
  * Meal plan card.
  * @param props Meal plan card props
@@ -33,12 +40,24 @@ export const MealPlanCard = ({mealPlan}: Props) => {
   /**
    * Contexts.
    */
-  const {deleteMealPlan, setActiveMealPlan} = useContext(FirebaseContext)
+  const {deleteMealPlan, editMealPlan, setActiveMealPlan} = useContext(FirebaseContext)
 
   /**
    * States.
    */
   const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [showEditForm, setShowEditForm] = useState(false)
+
+  /**
+   * Memos.
+   */
+  const initialFormValues = useMemo<AddMealPlanValues>(
+    () => ({
+      name: mealPlan.name,
+      userUid: '',
+    }),
+    [mealPlan.name],
+  )
 
   /**
    * Callbacks.
@@ -54,11 +73,64 @@ export const MealPlanCard = ({mealPlan}: Props) => {
     setActiveMealPlan,
   ])
 
-  return (
+  const handleShowForm = useCallback(() => setShowEditForm(true), [setShowEditForm])
+  const handleHideForm = useCallback(() => setShowEditForm(false), [setShowEditForm])
+  const handleEditMealPlan = useCallback(
+    async (values: AddMealPlanValues, formikHelpers: FormikHelpers<AddMealPlanValues>) => {
+      formikHelpers.setSubmitting(true)
+      await editMealPlan(mealPlan.uid, {name: values.name})
+      formikHelpers.resetForm()
+      formikHelpers.setSubmitting(false)
+      handleHideForm()
+    },
+    [editMealPlan, handleHideForm, mealPlan.uid],
+  )
+
+  const editMealPlanForm = (
+    <Card>
+      <Card.Body>
+        <Formik
+          validateOnBlur
+          initialValues={initialFormValues}
+          validationSchema={EditMealPlanFormSchema}
+          onSubmit={handleEditMealPlan}
+        >
+          {(props: FormikProps<AddMealPlanValues>) => (
+            <Form>
+              <BootstrapForm.Group controlId="name">
+                <BootstrapForm.Label>Name</BootstrapForm.Label>
+                <BootstrapForm.Control
+                  placeholder="Enter meal plan name"
+                  type="text"
+                  value={props.values.name}
+                  onBlur={props.handleBlur}
+                  onChange={props.handleChange}
+                />
+                {props.touched.name !== undefined && props.errors.name && (
+                  <BootstrapForm.Text className="text-danger">
+                    {props.errors.name}
+                  </BootstrapForm.Text>
+                )}
+              </BootstrapForm.Group>
+
+              <div className="d-flex justify-content-between">
+                <Button variant="secondary" onClick={handleHideForm}>
+                  Cancel
+                </Button>
+                <Button type="submit">Edit Meal</Button>
+              </div>
+            </Form>
+          )}
+        </Formik>
+      </Card.Body>
+    </Card>
+  )
+
+  const displayMealPlan = (
     <Card>
       <Card.Header className="p-0">
         <div className="d-flex justify-content-end">
-          <EditButton className="mr-1" size={22}>
+          <EditButton className="mr-1" size={22} onClick={handleShowForm}>
             Edit
           </EditButton>
           <DeleteButton size={22} onClick={handleOpenDeleteModal}>
@@ -88,4 +160,9 @@ export const MealPlanCard = ({mealPlan}: Props) => {
       </Card.Footer>
     </Card>
   )
+
+  const children = showEditForm ? editMealPlanForm : displayMealPlan
+
+  // eslint-disable-next-line react/jsx-no-useless-fragment
+  return <>{children}</>
 }

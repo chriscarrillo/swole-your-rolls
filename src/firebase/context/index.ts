@@ -1,4 +1,4 @@
-import {MealPlan, RequestState, User} from 'firebase/models/types'
+import {Meal, MealPlan, RequestState, User} from 'firebase/models/types'
 import {constant, noop} from 'lodash'
 import {AddMealPlanValues, AddMealValues} from 'models/FormValues'
 import {createContext} from 'react'
@@ -15,6 +15,8 @@ export interface FirebaseContext {
   addMealToMealPlan(addMealValues: AddMealValues): Promise<void>
   deleteMealFromMealPlan(mealUid: string): Promise<void>
   deleteMealPlan(mealPlanUid: string): Promise<void>
+  editMealInMealPlan(mealUid: string, mealUpdate: Omit<Meal, 'uid' | 'mealPlanUid'>): Promise<void>
+  editMealPlan(mealPlanUid: string, mealPlanUpdate: Omit<MealPlan, 'uid' | 'meals'>): Promise<void>
   login(email: string, password: string): Promise<RequestState>
   logout(): Promise<void>
   register(displayName: string, email: string, password: string): Promise<RequestState>
@@ -30,6 +32,8 @@ export const DEFAULT_CONTEXT: FirebaseContext = {
   addMealToMealPlan: constant(Promise.resolve()),
   deleteMealFromMealPlan: constant(Promise.resolve()),
   deleteMealPlan: constant(Promise.resolve()),
+  editMealInMealPlan: constant(Promise.resolve()),
+  editMealPlan: constant(Promise.resolve()),
   isLoggedIn: false,
   login: constant(Promise.resolve({error: 'ERROR', status: 'ERROR'})),
   logout: constant(Promise.resolve()),

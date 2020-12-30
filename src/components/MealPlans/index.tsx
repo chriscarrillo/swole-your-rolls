@@ -15,14 +15,11 @@ interface Props {
  * @return Meal plan table
  */
 export const MealPlans: React.FC<Props> = ({mealPlans}: Props) => {
-  const mealPlanCards = mealPlans.map(plan => {
-    console.log('plan uid', plan.uid)
-    return (
-      <Col key={plan.uid} as={CardDeck} className="mb-2" lg={4} md={6} sm={12}>
-        <MealPlanCard mealPlan={plan} />
-      </Col>
-    )
-  })
+  const mealPlanCards = mealPlans.map(plan => (
+    <Col key={plan.uid} as={CardDeck} className="mb-2" lg={4} md={6} sm={12}>
+      <MealPlanCard mealPlan={plan} />
+    </Col>
+  ))
 
   return (
     <Container>

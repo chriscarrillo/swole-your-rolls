@@ -194,15 +194,13 @@ export const useFirebase = () => {
     await firebase.firestore().collection('meals').add(addMealValues)
   }, [])
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const editMealPlan = useCallback(
-    async (mealPlanUid: string, mealPlanUpdate: Omit<MealPlan, 'uid'>) => {
+    async (mealPlanUid: string, mealPlanUpdate: Omit<MealPlan, 'uid' | 'meals'>) => {
       await firebase.firestore().collection('mealPlans').doc(mealPlanUid).update(mealPlanUpdate)
     },
     [],
   )
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const editMealInMealPlan = useCallback(
     async (mealUid: string, mealUpdate: Omit<Meal, 'uid' | 'mealPlanUid'>) => {
       await firebase.firestore().collection('meals').doc(mealUid).update(mealUpdate)
@@ -243,6 +241,8 @@ export const useFirebase = () => {
       addMealToMealPlan,
       deleteMealFromMealPlan,
       deleteMealPlan,
+      editMealInMealPlan,
+      editMealPlan,
       isLoggedIn,
       login,
       logout,
@@ -257,6 +257,8 @@ export const useFirebase = () => {
       addMealToMealPlan,
       deleteMealFromMealPlan,
       deleteMealPlan,
+      editMealInMealPlan,
+      editMealPlan,
       isLoggedIn,
       login,
       logout,

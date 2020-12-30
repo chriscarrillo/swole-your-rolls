@@ -94,11 +94,6 @@ export const Header: React.FC = () => {
           </NavMenuLink>
         </NavMenuLinkItem>
         <NavMenuLinkItem>
-          <NavMenuLink exact activeClassName="text-primary" to="/account">
-            Account
-          </NavMenuLink>
-        </NavMenuLinkItem>
-        <NavMenuLinkItem>
           <LogoutButton onClick={logout}>Logout</LogoutButton>
         </NavMenuLinkItem>
       </NavMenu>
