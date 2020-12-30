@@ -13,9 +13,12 @@ import {useCollectionData} from 'react-firebase-hooks/firestore'
  */
 export const HomePage: React.FC = () => {
   const {activeMealPlan, user} = useContext(FirebaseContext)
-  const [mealPlans] = useCollectionData(mealPlansQuery.where('userUid', '==', user?.uid), {
-    idField: 'uid',
-  })
+  const [mealPlans] = useCollectionData(
+    user ? mealPlansQuery.where('userUid', '==', user.uid) : mealPlansQuery,
+    {
+      idField: 'uid',
+    },
+  )
 
   const userMealPlans = mealPlans as MealPlan[] | undefined
   if (activeMealPlan) {
